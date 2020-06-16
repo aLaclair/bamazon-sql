@@ -1,4 +1,4 @@
 exports.keys = {
-    user: process.env.USER,
+    user: process.env.NAME,
     password: process.env.PASSWORD
 }
