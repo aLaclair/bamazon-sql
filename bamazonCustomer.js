@@ -31,12 +31,15 @@ connection.query('SELECT * FROM products', async function(err, res) {
             console.log('Insufficent Product!')
         } else {
             let newQuantity = parseInt(res[choice].stock_quantity - response.quantity)
-            let total = parseFloat(res[choice].price * response.quantity)
+            let total = parseFloat(res[choice].price * response.quantity).toFixed(2)
 
             connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?', [newQuantity, response.product],
             function(err) {
                 if (err) throw err;
                 console.log(`Order Placed! Your total is $${total}`)
+            })
+            connection.query('UPDATE products SET product_sales = ? WHERE item_id = ?', [total, response.product], function(err) {
+                if (err) throw err;
             })
         }
     })
@@ -49,5 +52,5 @@ connection.query('SELECT * FROM products', async function(err, res) {
 
 
 function afterConnection(res) {
-    console.table(res, ['item_id', 'product_name', 'price'])
+    console.table(res, ['item_id', 'product_name', 'price',])
 }

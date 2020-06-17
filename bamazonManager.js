@@ -6,18 +6,22 @@ var inquirer = require('inquirer')
 
 var mysql = require('mysql2')
 
+run()
+function run() {
+    console.clear()
 const connection = mysql.createConnection({
     host: 'localhost',
     user: keys.keys.user,
     password: keys.keys.password,
     database: 'bamazon'
 })
+
 inquirer.prompt([
     {
         type: 'list',
         name: 'choice',
         message: 'Select an option:',
-        choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product']
+        choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Product', 'EXIT']
     }
 ]).then(function(response) {
     switch (response.choice) {
@@ -27,6 +31,7 @@ inquirer.prompt([
                 viewProducts(res)
             })
             connection.end()
+            run()
         break;
 
 
@@ -36,6 +41,7 @@ inquirer.prompt([
                 viewProducts(res)
             })
             connection.end()
+            run()
         break;
     
 
@@ -68,6 +74,7 @@ inquirer.prompt([
                 })
             })
             connection.end()
+            run()
          })
         break;
 
@@ -97,9 +104,14 @@ inquirer.prompt([
             })
             
         break;
+
+        case 'EXIT':
+        console.clear()
+        connection.end()
+        break;
     }
 })
-
+}
 
 function viewProducts(res) {
     console.table(res, ['item_id', 'product_name', 'price', 'stock_quantity'])
